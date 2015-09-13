@@ -18,30 +18,27 @@ var {
 
 var LoginPage = React.createClass({
 
-  getInitialState: function() { 
+  getInitialState() { 
     return {
       email: '',
       password: ''
     }
   },
 
-  onLogin: function(e){
-    console.log(this.state.password, this.state.email);
+  onLogin(e){
     this.props.onLogin(this.state.email, this.state.password)
     this.props.navigator.push({id: 2,});    
   },
 
-  onEmailChange: function(e){
+  onEmailChange(e){
     this.setState({email:e.nativeEvent.text});
   },
 
-  onPasswordChange: function(e){
+  onPasswordChange(e){
     this.setState({password:e.nativeEvent.text});
   },
 
-
-
-  render: function() {
+  render() {
     return (
       <View style={styles.maincontainer}>
         <View style={styles.container}>

@@ -81,13 +81,15 @@ var styles = StyleSheet.create({
     fontFamily: 'Roboto-Black',//'Apple SD Gothic Neo',
     fontSize: 30,
     fontWeight: 'bold',
-    color: '#86DEA1'    
+    color: '#86DEA1',
+    textAlign: 'center'
   },
   warningText:{
     fontFamily: 'Roboto-Black',//'Apple SD Gothic Neo',
     fontSize: 30,
     fontWeight: 'bold',
-    color: '#FFFFFF'    
+    color: '#FFFFFF',
+    textAlign: 'center'
   },  
   hintTime: {
     fontSize: 45,

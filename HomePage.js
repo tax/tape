@@ -21,7 +21,7 @@ var {
 
 var HomePage = React.createClass({
   mixins: [TimerMixin],
-  getInitialState: function() { 
+  getInitialState() { 
     return {
       icon: 'fontawesome|heart-o',
       isLive: false,
@@ -29,20 +29,20 @@ var HomePage = React.createClass({
     }
   },
 
-  toProfile: function(){
+  toProfile(){
     this.props.navigator.push({id: 3});
   },
 
-  toMessages: function(){
+  toMessages(){
     this.props.navigator.push({id: 4});
   },
 
-  toggleActive: function(){
+  toggleActive(){
     this.setState({
       icon: !this.state.isLive ? 'fontawesome|heart' : 'fontawesome|heart-o',
       isLive: !this.state.isLive
     });
-    this.setInterval(function(){
+    this.setInterval(() => {
       var currenSize = this.state.iconSize;
       this.setState({ iconSize: currenSize == 175 ? 100 : currenSize + 1 });
     }, 20)
@@ -50,8 +50,7 @@ var HomePage = React.createClass({
     this.props.onActivate(!this.state.isLive);
   },
 
-
-  render: function() {    
+  render() {    
     var textInfo = this.state.isLive ? <Text/> : <Text style={styles.textInfo}>Click to start your adventure</Text>;
 
 
@@ -73,7 +72,7 @@ var HomePage = React.createClass({
               />
           </TouchableHighlight>
         </View>
-        <MainMenu navigator={this.props.navigator} />
+        <MainMenu navigator={this.props.navigator} ref="menu" />
       </View>
     );
   }

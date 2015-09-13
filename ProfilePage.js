@@ -19,14 +19,14 @@ var {
 
 var ProfilePage = React.createClass({
 
-  getInitialState: function() { 
+  getInitialState() { 
     return {
       email: '',
       password: ''
     }
   },
 
-  render: function() {
+  render() {
     return (
       <View style={styles.maincontainer} >
         <View style={styles.container}>

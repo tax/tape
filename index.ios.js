@@ -31,21 +31,10 @@ var {
 var SCREEN_WIDTH = require('Dimensions').get('window').width;
 var BaseConfig = Navigator.SceneConfigs.FloatFromRight;
 
-// var CustomLeftToRightGesture = Object.assign({}, BaseConfig.gestures.pop, {
-//   // Make it snap back really quickly after canceling pop
-//   snapVelocity: 8,
-//   // Make it so we can drag anywhere on the screen
-//   edgeHitWidth: SCREEN_WIDTH,
-// });
-
 var CustomSceneConfig = Object.assign({}, BaseConfig, {
   // A very tighly wound spring will make this transition fast
   springTension: 100,
   springFriction: 1,
-  // Use our custom gesture defined above
-  // gestures: {
-  //   pop: CustomLeftToRightGesture,
-  // }
 });
 
 var tape = React.createClass({
@@ -54,7 +43,7 @@ var tape = React.createClass({
   counter: 0,
   url: 'http://172.16.10.147:8000',
 
-  getInitialState: function() { 
+  getInitialState() { 
     console.log('Get initial');
     return {
       message: null,
@@ -64,11 +53,11 @@ var tape = React.createClass({
     }
   },
 
-  componentDidMount: function(){
+  componentDidMount(){
     this.pollInterval = this.setInterval(this.pollSite, 5000)
   },
 
-  pollSite: function(){
+  pollSite(){
     if(!this.state.isActive){
       console.log('User is not open for adventure');
       return;
@@ -86,6 +75,15 @@ var tape = React.createClass({
       .then((responseJson) => {
         if(!_.isEmpty(responseJson)){
           this.setState({message:responseJson})
+          AlertIOS.alert(
+            'Adventure awaits',
+            'You have a new message',
+            [
+              {text: 'Dismiss', onPress: () => console.log('Foo Pressed!')},
+              {text: 'Check', onPress: () => this.refs.nav.push({id:4}) },
+            ]
+          )
+
           this.clearInterval(this.pollInterval);
         }
         else{
@@ -140,7 +138,8 @@ var tape = React.createClass({
       <Navigator
         initialRoute={{id: 1, }}
         renderScene={this._renderScene}
-        configureScene={this._configureScene} />
+        configureScene={this._configureScene} 
+        ref="nav"/>
     );
   }
 });

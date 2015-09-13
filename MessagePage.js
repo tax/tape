@@ -22,14 +22,14 @@ var {
 var Message = React.createClass({
   mixins: [TimerMixin],
 
-  getInitialState: function() { 
+  getInitialState() { 
     return {
       iconSize: 175,
     }
   },
 
-  componentDidMount: function(){
-    this.setInterval(function(){
+  componentDidMount(){
+    this.setInterval(() => {
       var currenSize = this.state.iconSize;
       this.setState({ iconSize: currenSize == 175 ? 140 : currenSize + 1 });
     }, 20)
@@ -37,7 +37,7 @@ var Message = React.createClass({
 
 
 
-  render: function() {
+  render() {
     return (
         <View style={styles.container}>
           <Text style={styles.textInfo}>Click to start your date</Text>
@@ -61,7 +61,7 @@ var Message = React.createClass({
 
 var MessagePage = React.createClass({
 
-  getInitialState: function() { 
+  getInitialState() { 
     return {
       email: '',
       password: '',
@@ -71,7 +71,7 @@ var MessagePage = React.createClass({
     }
   },
 
-  getDefaultProps: function() {
+  getDefaultProps() {
     return {
       message: {
         time: 'Today 19:00',
@@ -85,15 +85,15 @@ var MessagePage = React.createClass({
     };
   },  
 
-  openTime: function(){
+  openTime(){
     this.refs.time.open();
   },
   
-  openLocation: function(){
+  openLocation(){
     this.refs.location.open();
   },
 
-  openNextHint: function(){
+  openNextHint(){
     //this.refs.hints.close();
     console.log(this.state.hintCounter);
     this.setState({
@@ -111,7 +111,7 @@ var MessagePage = React.createClass({
     }    
   },
 
-  render: function() {
+  render() {
     var message = <Message onClick={this.openTime}/>
     if(_.isNull(this.props.message) ){
       message = <View style={styles.container}><Text style={styles.textInfo}>No messages at this time</Text></View>;
@@ -236,7 +236,7 @@ var MessagePage = React.createClass({
             position={"center"}
             ref={"final"}>
             <Icon
-              name={'fontawesome|user'}
+              name={'fontawesome|hand-paper-o'}
               size={50}
               color='#FFFFFF'
               style={{
