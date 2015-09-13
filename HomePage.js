@@ -46,7 +46,6 @@ var HomePage = React.createClass({
       var currenSize = this.state.iconSize;
       this.setState({ iconSize: currenSize == 175 ? 100 : currenSize + 1 });
     }, 20)
-
     this.props.onActivate(!this.state.isLive);
   },
 

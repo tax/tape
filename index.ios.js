@@ -108,10 +108,27 @@ var tape = React.createClass({
   },
 
   _onActivate(isActive){
-    console.log('User is active');
+    console.log(isActive ? 'User is active': 'User is not active');
     this.setState({
       isActive: isActive
     })
+
+    var request = new XMLHttpRequest();
+    request.onreadystatechange = (e) => {
+      if (request.readyState !== 4) {
+        return;
+      }
+
+      if (request.status === 200) {
+        console.log('success', request.responseText);
+      } else {
+        console.warn('error');
+      }
+    };
+    var endPoint = isActive ? '/start-match?username=' + this.state.username : '/end-match?username=' + this.state.username;
+    console.log(this.url + endPoint);
+    request.open('POST', this.url + endPoint);
+    request.send();    
   },
 
 
