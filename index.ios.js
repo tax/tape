@@ -7,7 +7,11 @@
 
 var React = require('react-native');
 var LoginPage = require('./LoginPage');
-var SettingsPage = require('./SettingsPage');
+var HomePage = require('./HomePage');
+var ProfilePage = require('./ProfilePage');
+var MessagePage = require('./MessagePage');
+
+var _ = require('lodash');
 var TimerMixin = require('react-timer-mixin');
 var {
   AppRegistry,
@@ -23,119 +27,108 @@ var {
   View
 } = React;
 
-//http://paletton.com/palette.php?uid=75g0u0k7UUa3cZA5wXlaiQ5cFL3
-
-// var tape = React.createClass({
-//   mixins: [TimerMixin],
-
-
-
-//   componentDidMount: function() {
-//     // this.setInterval(
-//     //   function(){ console.log('Poll server!'); },
-//     //   5000
-//     // );
-//   },
-
-//   getInitialState: function() { 
-//     return {
-//       email: '',
-//       password: ''
-//     }
-
-//     // var ds = new ListView.DataSource({
-//     //   rowHasChanged: (r1, r2) => r1 !== r2}); 
-//     // return { dataSource: ds.cloneWithRows(['row 1', 'row 2']), }; 
-//   },
-
-//   render: function() {
-//     return <LoginPage/>;
-//     // return (
-//     //   <View style={styles.container}>
-//     //     <Text style={styles.welcome}>
-//     //       Email!:
-//     //     </Text>
-//     //     <TextInput style={{height: 40, borderColor: 'gray', borderWidth: 1}} onChange={this.onEmailChange} />
-//     //     <Text style={styles.welcome}>
-//     //       Password:
-//     //     </Text>
-//     //     <TextInput style={{height: 40, borderColor: 'gray', borderWidth: 1}} onChange={this.onPasswordChange} />
-//     //     <TouchableHighlight underlayColor="#a9d9d4" onPress={this.onLogin}>
-//     //       <Text>Submit!!!</Text>
-//     //     </TouchableHighlight>
-//     //   </View>
-//     // );
-//   }
-// });
-
-// var styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//     backgroundColor: '#F5FCFF',
-//   },
-//   row: { 
-//     flexDirection: 'row',
-//     justifyContent: 'center',
-//     padding: 10,
-//     backgroundColor: '#F6F6F6', 
-//   }, 
-//   separator: { 
-//     height: 1,
-//     backgroundColor: '#CCCCCC', 
-//   },  
-//   welcome: {
-//     fontSize: 20,
-//     textAlign: 'center',
-//     margin: 10,
-//   },
-//   instructions: {
-//     textAlign: 'center',
-//     color: '#333333',
-//     marginBottom: 5,
-//   },
-//   button: {
-//     borderRadius: 4,
-//     padding: 10,
-//     marginLeft: 10,
-//     marginRight: 10,
-//     backgroundColor: "#B8C",
-//   },  
-// });
-
 
 var SCREEN_WIDTH = require('Dimensions').get('window').width;
 var BaseConfig = Navigator.SceneConfigs.FloatFromRight;
 
-var CustomLeftToRightGesture = Object.assign({}, BaseConfig.gestures.pop, {
-  // Make it snap back really quickly after canceling pop
-  snapVelocity: 8,
-  // Make it so we can drag anywhere on the screen
-  edgeHitWidth: SCREEN_WIDTH,
-});
+// var CustomLeftToRightGesture = Object.assign({}, BaseConfig.gestures.pop, {
+//   // Make it snap back really quickly after canceling pop
+//   snapVelocity: 8,
+//   // Make it so we can drag anywhere on the screen
+//   edgeHitWidth: SCREEN_WIDTH,
+// });
 
 var CustomSceneConfig = Object.assign({}, BaseConfig, {
   // A very tighly wound spring will make this transition fast
   springTension: 100,
   springFriction: 1,
   // Use our custom gesture defined above
-  gestures: {
-    pop: CustomLeftToRightGesture,
-  }
+  // gestures: {
+  //   pop: CustomLeftToRightGesture,
+  // }
 });
 
 var tape = React.createClass({
+  mixins: [TimerMixin],
+  pollInterval: null,
+  counter: 0,
+  url: 'http://172.16.10.147:8000',
+
+  getInitialState: function() { 
+    console.log('Get initial');
+    return {
+      message: null,
+      isActive: false,
+      username: '',
+      password: ''
+    }
+  },
+
+  componentDidMount: function(){
+    this.pollInterval = this.setInterval(this.pollSite, 5000)
+  },
+
+  pollSite: function(){
+    if(!this.state.isActive){
+      console.log('User is not open for adventure');
+      return;
+    }
+    if(this.state.username.length < 2){
+      console.log('Not logged in');
+      return;
+    }
+
+    console.log('Poll site');
+    this.counter = this.counter + 1;
+    //this.setState({ iconSize: currenSize == 175 ? 140 : currenSize + 1 });
+    fetch(this.url + '/poll?username=' + this.state.username)
+      .then((response) => response.json())
+      .then((responseJson) => {
+        if(!_.isEmpty(responseJson)){
+          this.setState({message:responseJson})
+          this.clearInterval(this.pollInterval);
+        }
+        else{
+         console.log('empty');
+        }
+        
+      })
+      .catch((error) => {
+        console.warn(error);
+      });    
+    // if(this.counter > 2){
+    //   this.clearInterval(this.pollInterval);  
+    // }
+  },
+
   _onLogin(username, password){
     console.log(username, password);
+    this.setState({
+      username: username,
+      password: password
+    })
   },
+
+  _onActivate(isActive){
+    console.log('User is active');
+    this.setState({
+      isActive: isActive
+    })
+  },
+
+
 
   _renderScene(route, navigator) {
     if (route.id === 1) {
       return <LoginPage navigator={navigator} onLogin={this._onLogin} />
     } else if (route.id === 2) {
-      return <SettingsPage navigator={navigator} />
+      return <HomePage navigator={navigator} onActivate={this._onActivate}/>
+    } else if (route.id === 3) {
+      return <ProfilePage navigator={navigator} />
+    } else if (route.id === 4) {
+      return <MessagePage navigator={navigator} message={this.state.message} />
     }
+
   },
 
   _configureScene(route) {

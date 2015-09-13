@@ -43,19 +43,23 @@ var LoginPage = React.createClass({
 
   render: function() {
     return (
-      <View style={styles.container}>
-        <TextInput 
-          style={styles.textinput} 
-          onChange={this.onEmailChange}
-          placeholder="Email"/>
-        <TextInput
-          style={styles.textinput}
-          onChange={this.onPasswordChange}
-          placeholder="Password"
-          secureTextEntry={true}/>
-        <TouchableHighlight style={styles.button} onPress={this.onLogin}>
-          <Text style={styles.buttontext}>Login</Text>
-        </TouchableHighlight>
+      <View style={styles.maincontainer}>
+        <View style={styles.container}>
+          <TextInput 
+            style={styles.textinput} 
+            onChange={this.onEmailChange}
+            placeholder="Email"/>
+          <TextInput
+            style={styles.textinput}
+            onChange={this.onPasswordChange}
+            placeholder="Password"
+            secureTextEntry={true}/>
+          <TouchableHighlight style={styles.button} onPress={this.onLogin}>
+            <Text style={styles.buttontext}>       Login       </Text>
+          </TouchableHighlight>
+        </View>
+        <View style={{flexDirection: 'row', padding: 0, height:150}}>
+        </View>
       </View>
     );
   }

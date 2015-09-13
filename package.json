@@ -6,7 +6,10 @@
     "start": "node_modules/react-native/packager/packager.sh"
   },
   "dependencies": {
+    "lodash": "^3.10.1",
     "react-native": "^0.10.1",
+    "react-native-icons": "^0.3.6",
+    "react-native-modalbox": "^1.1.4",
     "react-timer-mixin": "^0.13.3"
   }
 }
